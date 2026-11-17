@@ -1,0 +1,35 @@
+import { Navigate, Outlet } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
+import Navbar from './Navbar';
+
+export function ProtectedLayout() {
+  const { user, loading } = useAuth();
+
+  if (loading) {
+    return (
+      <div className="flex min-h-screen items-center justify-center text-muted">
+        Loading…
+      </div>
+    );
+  }
+
+  if (!user) return <Navigate to="/login" replace />;
+
+  return (
+    <div className="min-h-screen">
+      <Navbar />
+      <main className="mx-auto max-w-6xl px-4 py-8">
+        <Outlet />
+      </main>
+    </div>
+  );
+}
+
+export function PublicLayout() {
+  return (
+    <div className="min-h-screen">
+      <Navbar />
+      <Outlet />
+    </div>
+  );
+}
